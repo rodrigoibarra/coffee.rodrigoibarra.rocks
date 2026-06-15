@@ -1,17 +1,152 @@
 ---
-
+import BaseLayout from "@/layouts/baseLayout.astro"
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+
+    <div class="cover title">
+        <div class="stack ">
+            <h1 class="mainTitle">A good Cup</h1>
+            <p class="mainTag">Coffee notes by IronLapin</p>
+        </div>
+
+    </div>
+        <section class="metArea container grid">
+            <div class="logArea stack">
+                <h1 class="sectionTitle">The Log</h1>
+                <p>A log of every espresso shot I've pulled on my Meticulous machine.</p>
+
+                <a href="#" class="button"> View All</a>
+            </div>
+            <div class="profilesArea stack">
+                <h1 class="sectionTitle">
+                    The Profiles
+                </h1>
+                <p>A list of different espresso profiles I've developped</p>
+                <a href="#" class="button"> View All</a>
+            </div>
+        </section>
+        <section class="coffeesArea pattern-3 container grid stack">
+            <h1 class="sectionTitle">
+                The Coffees
+            </h1>
+            <div class="coffee">
+                <h2 class="coffeeName">Natural Anaerobic</h2>
+                <p class="coffeeRoaster">by Ilustre Speciality Roasters</p>
+                <table>
+                    <tr >
+                        <thead >
+                            <th colspan="2">Roaster</th>
+                        </thead>
+                        <tbody >
+                                <td colspan="2">
+                                    Ilustre Speciality Coffee
+                                </td>
+                        </tbody>
+                    </tr>
+
+                    <tr>
+                        <thead>
+                            <th>Process</th>
+                            <th>Variety</th>
+                        </thead>
+                        <tbody>
+                                <td>Natural Anaerobic</td>
+                                <td> Castillo</td>
+                        </tbody>
+                    </tr>
+                    <tr>
+                        <thead>
+                            <th>Farm</th>
+                            <th>Origin</th>
+                        </thead>
+                        <tbody>
+                                <td>Finca Leona</td>
+                                <td>Quindio, Colombia</td>
+                        </tbody>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="coffee">
+                <h2 class="coffeeName">Natural Anaerobic</h2>
+                <p class="coffeeRoaster">by Ilustre Speciality Roasters</p>
+                <table>
+                    <tr >
+                        <thead >
+                            <th colspan="2">Roaster</th>
+                        </thead>
+                        <tbody >
+                                <td colspan="2">
+                                    Ilustre Speciality Coffee
+                                </td>
+                        </tbody>
+                    </tr>
+
+                    <tr>
+                        <thead>
+                            <th>Process</th>
+                            <th>Variety</th>
+                        </thead>
+                        <tbody>
+                                <td>Natural Anaerobic</td>
+                                <td> Castillo</td>
+                        </tbody>
+                    </tr>
+                    <tr>
+                        <thead>
+                            <th>Farm</th>
+                            <th>Origin</th>
+                        </thead>
+                        <tbody>
+                                <td>Finca Leona</td>
+                                <td>Quindio, Colombia</td>
+                        </tbody>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="coffee">
+                <h2 class="coffeeName">Natural Anaerobic</h2>
+                <p class="coffeeRoaster">by Ilustre Speciality Roasters</p>
+                <table>
+                    <tr >
+                        <thead >
+                            <th colspan="2">Roaster</th>
+                        </thead>
+                        <tbody >
+                                <td colspan="2">
+                                    Ilustre Speciality Coffee
+                                </td>
+                        </tbody>
+                    </tr>
+
+                    <tr>
+                        <thead>
+                            <th>Process</th>
+                            <th>Variety</th>
+                        </thead>
+                        <tbody>
+                                <td>Natural Anaerobic</td>
+                                <td> Castillo</td>
+                        </tbody>
+                    </tr>
+                    <tr>
+                        <thead>
+                            <th>Farm</th>
+                            <th>Origin</th>
+                        </thead>
+                        <tbody>
+                                <td>Finca Leona</td>
+                                <td>Quindio, Colombia</td>
+                        </tbody>
+                    </tr>
+
+                </table>
+            </div>
+
+            <a href="#" class="button"> View All</a>
+
+        </section>
+
+</BaseLayout>

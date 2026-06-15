@@ -1,0 +1,61 @@
+---
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
+import type { ShotIndexEntry } from '@/types'
+import BaseLayout from '@/layouts/baseLayout.astro'
+
+export async function getStaticPaths() {
+  const PER_PAGE = 25
+
+  const raw = readFileSync(resolve('src/cache/shots/shots-index.json'), 'utf-8')
+  const allShots: ShotIndexEntry[] = JSON.parse(raw)
+
+  allShots.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+
+  const totalPages = Math.ceil(allShots.length / PER_PAGE)
+
+  return Array.from({ length: totalPages }, (_, i) => {
+    const page = i + 1
+    return {
+      params: { page: String(page) },
+      props: {
+        shots: allShots.slice((page - 1) * PER_PAGE, page * PER_PAGE),
+        page,
+        totalPages,
+        totalShots: allShots.length,
+      },
+    }
+  })
+}
+
+const PER_PAGE = 25
+const { shots, page, totalPages, totalShots } = Astro.props
+---
+
+<BaseLayout title="The Brew Log">
+  <main class="logPage container grid">
+    <h1 class="mainTitle">The Brew Log</h1>
+    <h2>A log of every espresso I've pulled</h2>
+    <p>{totalShots} shots</p>
+
+    <ol class="logList stack" start={(page - 1) * PER_PAGE + 1}>
+      {shots.map(shot => (
+        <li class="logEntry">
+          <a href={`/log/${shot.id}`}>
+            {shot.profile_name} | <span><time datetime={shot.timestamp}>{new Date(shot.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time> {shot.profile_target_weight}g / {shot.profile_temperature}°C</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <nav aria-label="Pagination">
+      {page > 1 && (
+        <a href={`/log/${page - 1}`}>← Previous</a>
+      )}
+      <span>{page} / {totalPages}</span>
+      {page < totalPages && (
+        <a href={`/log/${page + 1}`}>Next →</a>
+      )}
+    </nav>
+  </main>
+</BaseLayout>

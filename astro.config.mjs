@@ -1,3 +1,4 @@
+import { fileURLToPath, URL } from 'node:url'
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
@@ -10,7 +11,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@': '/src',
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
   },

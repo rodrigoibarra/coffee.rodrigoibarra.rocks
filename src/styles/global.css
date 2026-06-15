@@ -1,0 +1,159 @@
+@import url("reset.css");
+@import url("variables.css");
+@import url("patterns.css");
+
+:root {
+  font-size: var(--step-0);
+  font-family: var(--font-prose);
+}
+body {
+  background-color: var(--color-extrawhite);
+}
+
+main {
+  padding: var(--space-l);
+}
+
+h2 {
+  font-family: var(--font-headers);
+  color: var(--color-darkalt);
+}
+
+.cover {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100vh;
+  padding: var(--space-s);
+}
+
+.title {
+  justify-content: center;
+  align-items: center;
+  color: var(--color-lightalt);
+}
+
+.stack > * + * {
+  margin-block-start: var(--step-2);
+}
+
+.mainTitle {
+  font-family: var(--font-display);
+  font-size: var(--step-7);
+  color: inherit;
+  margin-block: auto;
+  text-align: center;
+}
+
+.mainTag {
+  text-align: center;
+  color: var(--color-darkgray);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-kerning: var(--space-2xs);
+  color: inherit;
+}
+
+.metArea {
+  padding: 0;
+  margin: 0;
+  color: var(--color-lightwhite);
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.logArea {
+  background-color: var(--color-darkgray);
+  color: var(--color-lightwhite);
+  padding: var(--space-m);
+  .sectionTitle {
+    color: var(--color-lightalt);
+  }
+}
+.profilesArea {
+  background-color: var(--color-darkaccent);
+  padding: var(--space-m);
+  .sectionTitle {
+    color: var(--color-lightaccent);
+  }
+}
+
+.coffeesArea {
+  grid-template-columns: repeat(3, auto);
+  color: var(--color-extrawhite);
+  padding: var(--space-m);
+  gap: var(--space-2xs);
+
+  .sectionTitle {
+    grid-column: span 3 / span 3;
+  }
+}
+
+.coffee {
+  background-color: var(--color-darkgray);
+  padding: var(--space-xs);
+  font-size: var(--step--1);
+}
+
+table {
+  border-collapse: collapse;
+}
+thead {
+  text-align: left;
+  font-family: var(--font-headers);
+  border-top: 1px solid red;
+}
+
+th {
+  color: var(--color-lightalt);
+  border-top: 1px solid var(--color-lightaccent);
+  padding: var(--space-2xs) 0;
+}
+
+td {
+  padding: var(--space-3xs);
+}
+
+th:nth-child(odd) {
+  color: var(--color-lightaccent);
+}
+
+.button {
+  display: inline-block;
+  color: var(--color-extrawhite);
+  background-color: var(--color-lightalt);
+  border-radius: var(--space-3xs);
+  padding: var(--space-2xs);
+  text-align: center;
+  justify-self: start;
+  font-weight: 100;
+  font-size: var(--step--1);
+}
+
+.logList {
+  list-style-position: inside;
+}
+.logEntry {
+  font-size: var(--step-2);
+  height: var(--step-2);
+  line-height: var(--step-2);
+  a {
+    text-decoration: none;
+  }
+
+  span {
+    font-size: var(--step--1);
+    color: var(--color-lightalt);
+    time {
+      color: var(--color-lightgray);
+    }
+  }
+}
+
+@media screen and (max-width: 481px) {
+  .metArea,
+  .coffeesArea {
+    display: block;
+  }
+}
