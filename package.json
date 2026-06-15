@@ -7,7 +7,9 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run sync:coffees && npm run sync:shots && astro build",
+    "sync:shots": "tsx scripts/sync-shots.ts",
+    "sync:coffees": "tsx scripts/sync-coffees.ts",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -15,19 +17,25 @@
     "@astrojs/mdx": "^6.0.3",
     "@astrojs/react": "^5.0.7",
     "@astrojs/sitemap": "^3.7.3",
+    "@aws-sdk/client-s3": "^3.1068.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "astro": "^6.4.6",
+    "dotenv": "^17.4.2",
     "plotly.js": "^3.6.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-plotly.js": "^3.0.0"
+    "react-plotly.js": "^3.0.0",
+    "tslib": "^2.8.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^8.61.0",
     "@typescript-eslint/parser": "^8.61.0",
     "eslint": "^10.4.1",
-    "eslint-plugin-astro": "^1.7.0"
+    "eslint-plugin-astro": "^1.7.0",
+    "prettier": "^3.8.4",
+    "tsx": "^4.22.4"
   }
 }

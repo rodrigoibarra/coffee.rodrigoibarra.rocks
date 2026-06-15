@@ -1,0 +1,146 @@
+/* =============================================================================
+   A Good Cup — Design Tokens
+   Generated from a-good-cup-design-tokens.tokens.json
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Font Imports
+   ----------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Marvin Visions";
+  src: url("/fonts/MarvinVisions-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fern Text";
+  src: url("/fonts/FernText-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fern Text";
+  src: url("/fonts/FernText-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fern Text";
+  src: url("/fonts/FernText-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oakes Grotesk";
+  src: url("/fonts/oakes-grotesk-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+:root {
+
+
+  /* ---------------------------------------------------------------------------
+     Colors
+     --------------------------------------------------------------------------- */
+
+  --color-lightgray: #374140;
+  --color-darkgray: #1c2324;
+  --color-lightwhite: #fdfdfd;
+  --color-extrawhite: #edece1;
+  --color-lightaccent: #72a19b;
+  --color-darkaccent: #29544d;
+  --color-lightalt: #fa6a69;
+  --color-darkalt: #762f28;
+
+  /* ---------------------------------------------------------------------------
+     Typography — Font Families
+     --------------------------------------------------------------------------- */
+
+  --font-display: "Marvin Visions", sans-serif;
+  --font-prose: "Fern Text", serif;
+  --font-headers: "Oakes Grotesk", sans-serif;
+
+  /* ---------------------------------------------------------------------------
+     Typography — Font Sizes
+     --------------------------------------------------------------------------- */
+     --step--3: clamp(0.5787rem, 0.5536rem + 0.1114cqi, 0.64rem);
+     --step--2: clamp(0.6944rem, 0.6513rem + 0.1919cqi, 0.8rem);
+     --step--1: clamp(0.8333rem, 0.7652rem + 0.303cqi, 1rem);
+     --step-0: clamp(1rem, 0.8977rem + 0.4545cqi, 1.25rem);
+     --step-1: clamp(1.2rem, 1.0517rem + 0.6591cqi, 1.5625rem);
+     --step-2: clamp(1.44rem, 1.2301rem + 0.933cqi, 1.9531rem);
+     --step-3: clamp(1.728rem, 1.4362rem + 1.2971cqi, 2.4414rem);
+     --step-4: clamp(2.0736rem, 1.6734rem + 1.7785cqi, 3.0518rem);
+     --step-5: clamp(2.4883rem, 1.9457rem + 2.4116cqi, 3.8147rem);
+     --step-6: clamp(2.986rem, 2.2568rem + 3.2407cqi, 4.7684rem);
+     --step-7: clamp(3.5832rem, 2.6107rem + 4.3223cqi, 5.9605rem);
+     --step-8: clamp(4.2998rem, 3.0109rem + 5.7287cqi, 7.4506rem);
+     --step-9: clamp(5.1598rem, 3.4606rem + 7.5517cqi, 9.3132rem);
+
+  --font-size-display: var(--step-6);
+  --font-size-headers: var(--step-4);
+  --font-size-prose: var(--step-0);
+
+  /* ---------------------------------------------------------------------------
+     Typography — Font Weights
+     --------------------------------------------------------------------------- */
+
+  --font-weight-display: 700;
+  --font-weight-headers: 700;
+  --font-weight-prose: 400;
+
+  /* ---------------------------------------------------------------------------
+     Typography — Line Heights
+     --------------------------------------------------------------------------- */
+
+  --line-height-display: var(--step-6);
+  --line-height-headers: var(--step-4);
+  --line-height-prose: var(--step-2);
+
+  /* ---------------------------------------------------------------------------
+     Spacing
+     --------------------------------------------------------------------------- */
+     --space-3xs: clamp(0.25rem, 0.2244rem + 0.1136cqi, 0.3125rem);
+     --space-2xs: clamp(0.5rem, 0.4489rem + 0.2273cqi, 0.625rem);
+     --space-xs: clamp(0.75rem, 0.6733rem + 0.3409cqi, 0.9375rem);
+     --space-s: clamp(1rem, 0.8977rem + 0.4545cqi, 1.25rem);
+     --space-m: clamp(1.5rem, 1.3466rem + 0.6818cqi, 1.875rem);
+     --space-l: clamp(2rem, 1.7955rem + 0.9091cqi, 2.5rem);
+     --space-xl: clamp(3rem, 2.6932rem + 1.3636cqi, 3.75rem);
+     --space-2xl: clamp(4rem, 3.5909rem + 1.8182cqi, 5rem);
+     --space-3xl: clamp(6rem, 5.3864rem + 2.7273cqi, 7.5rem);
+     --space-s-l: clamp(1rem, 0.3864rem + 2.7273vw, 2.5rem);
+
+     /* ---------------------------------------------------------------------------
+       Grid
+       --------------------------------------------------------------------------- */
+       --grid-max-width: 77.50rem;
+       --grid-gutter: var(--space-s-l, clamp(1rem, 0.3864rem + 2.7273vw, 2.5rem));
+       --grid-columns: 12;
+
+}
+
+
+.container {
+  max-width: var(--grid-max-width);
+  padding-inline: var(--grid-gutter);
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  gap: var(--grid-gutter);
+
+}

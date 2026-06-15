@@ -1,0 +1,22 @@
+.pattern-1, .pattern-2, .pattern-3, .pattern-4, .pattern-5, .pattern-6{
+    background-repeat: repeat;
+}
+
+.pattern-1{
+    background-image: url(/public/patterns/pattern-1.png);
+}
+.pattern-2{
+    background-image: url(/public/patterns/pattern-2.png);
+}
+.pattern-3{
+    background-image: url(/public/patterns/pattern-3.png);
+}
+.pattern-4{
+    background-image: url(/public/patterns/pattern-4.png);
+}
+.pattern-5{
+    background-image: url(/public/patterns/pattern-5.png);
+}
+.pattern-6{
+    background-image: url(/public/patterns/pattern-6.png);
+}
