@@ -1,0 +1,12 @@
+[build]
+  command = "npm run sync:coffees && npm run sync:shots && astro build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-cache"
+
+  [plugins.inputs]
+    paths = ["src/cache/shots", "src/cache/coffees"]

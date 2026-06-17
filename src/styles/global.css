@@ -19,6 +19,42 @@ h2 {
   color: var(--color-darkalt);
 }
 
+p {
+  max-width: 68ch;
+}
+
+nav.container {
+  background-color: var(--color-lightaccent);
+  padding: 10px var(--space-2xs);
+}
+
+.mainNav {
+  font-family: var(--font-headers);
+  color: var(--color-lightwhite);
+  font-size: var(--step--1);
+  font-weight: 100;
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
+}
+.mainNav > li {
+  padding-left: var(--space-xs);
+  a {
+    text-decoration: none;
+  }
+}
+.cupIcon {
+  height: var(--space-2xs);
+  width: auto;
+  fill: var(--color-extrawhite);
+}
+.siteIcon {
+  margin-right: auto;
+  padding: var(--space-2xs);
+}
+
 .cover {
   display: flex;
   flex-direction: column;
@@ -50,54 +86,116 @@ h2 {
 }
 
 .sectionTitle {
+  --_title-color: var(--title-color, --color-lightwhite);
   font-family: var(--font-display);
   font-kerning: var(--space-2xs);
-  color: inherit;
+  color: var(--_title-color);
 }
 
 .metArea {
+  --grid-columns: 1fr 1fr;
+  --grid-gutter: 0;
   padding: 0;
   margin: 0;
   color: var(--color-lightwhite);
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
 }
 
 .logArea {
+  --title-color: var(--color-lightalt);
   background-color: var(--color-darkgray);
   color: var(--color-lightwhite);
   padding: var(--space-m);
-  .sectionTitle {
-    color: var(--color-lightalt);
-  }
 }
-.profilesArea {
-  background-color: var(--color-darkaccent);
-  padding: var(--space-m);
-  .sectionTitle {
-    color: var(--color-lightaccent);
+
+.shotStats {
+  --grid-columns: 1fr 1fr 1fr 1fr;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  dd,
+  dt {
+    color: var(--color-lightgray);
+    font-family: var(--font-mono);
+  }
+  dd {
+    font-size: var(--step--3);
+    font-weight: 100;
+  }
+  dt {
+    font-size: var(--step--2);
+    font-weight: 600;
   }
 }
 
+.profilesArea {
+  --title-color: var(--color-lightaccent);
+  background-color: var(--color-darkaccent);
+  padding: var(--space-m);
+}
+
 .coffeesArea {
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   color: var(--color-extrawhite);
   padding: var(--space-m);
   gap: var(--space-2xs);
 
   .sectionTitle {
-    grid-column: span 3 / span 3;
+    background-color: var(--color-lightalt);
+    max-width: 350px;
+    padding: var(--space-2xs);
+    grid-column: 1 / -1;
   }
+  .button {
+    grid-column: 1 / -1;
+  }
+}
+
+.coffeeList {
+  --grid-columns: repeat(auto-fit, minmax(350px, 1fr));
+  --grid-gutter: var(--space-2xs);
+  color: var(--color-lightwhite);
+  .coffee {
+    border: 15px solid transparent;
+    border-image: url("/patterns/pattern-3.png") 15 repeat;
+  }
+}
+
+.coffeeName {
+  color: var(--color-lightalt);
 }
 
 .coffee {
   background-color: var(--color-darkgray);
   padding: var(--space-xs);
-  font-size: var(--step--1);
+  font-size: var(--step--2);
+
+  dl {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: var(--space-2xs) 0;
+  }
+
+  dt {
+    width: auto;
+    font-family: var(--font-mono);
+    color: var(--color-lightalt);
+    display: inline;
+    padding: var(--space-3xs) 0;
+    border-top: 2px solid var(--color-lightaccent);
+  }
+
+  dt:nth-of-type(odd) {
+    color: var(--color-lightaccent);
+  }
 }
 
 table {
   border-collapse: collapse;
+  width: 100%;
 }
 thead {
   text-align: left;
@@ -135,7 +233,7 @@ th:nth-child(odd) {
   list-style-position: inside;
 }
 .logEntry {
-  font-size: var(--step-2);
+  font-size: var(--step-1);
   height: var(--step-2);
   line-height: var(--step-2);
   a {
@@ -143,12 +241,30 @@ th:nth-child(odd) {
   }
 
   span {
+    vertical-align: middle;
+    font-family: var(--font-mono);
     font-size: var(--step--1);
     color: var(--color-lightalt);
     time {
+      font-family: var(--font-prose);
       color: var(--color-lightgray);
     }
   }
+}
+
+summary::marker {
+  color: var(--color-darkalt);
+}
+summary {
+  font-size: var(--step--1);
+  font-weight: 100;
+  font-family: var(--font-headers);
+  color: var(--color-lightalt);
+}
+
+ul {
+  font-size: var(--step--2);
+  list-style-position: inside;
 }
 
 @media screen and (max-width: 481px) {
