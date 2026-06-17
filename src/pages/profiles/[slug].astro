@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/baseLayout.astro'
+import ShotGraph from '@/components/ShotGraph'
+import { getCollection, render } from 'astro:content'
+import { buildProfileTraces } from '@/utils/profile'
+import type { IdealCurve } from '@/types/profile'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('profiles')
+  const curveFiles = import.meta.glob<{ default: IdealCurve }>('/src/cache/profiles/*-ideal.json')
+
+  return Promise.all(
+    entries.map(async (entry) => {
+      const { default: curve } = await curveFiles[`/src/cache/profiles/${entry.id}-ideal.json`]()
+
+      return {
+        params: { slug: entry.id },
+        props: {
+          entry,
+          traces: buildProfileTraces(curve),
+          totalTime: curve.time[curve.time.length - 1],
+          finalWeight: curve.weight[curve.weight.length - 1],
+        },
+      }
+    }),
+  )
+}
+
+const { entry, traces, totalTime, finalWeight } = Astro.props
+const { Content } = await render(entry)
+---
+
+<BaseLayout title={entry.data.title}>
+  <section class="container stack">
+    <h1 class="mainTitle">{entry.data.title}</h1>
+    <p>{entry.data.description}</p>
+
+    <dl class="profileStats grid">
+      <div><dt>Total time |</dt><dd>{totalTime.toFixed(1)}s</dd></div>
+      <div><dt>Final weight |</dt><dd>{finalWeight.toFixed(1)}g</dd></div>
+      <div><dt>Temperature |</dt><dd>{entry.data.temperature}°C</dd></div>
+    </dl>
+
+    <ShotGraph client:only="react" traces={traces} shapes={[]} annotations={[]} />
+
+    <Content />
+  </section>
+</BaseLayout>
