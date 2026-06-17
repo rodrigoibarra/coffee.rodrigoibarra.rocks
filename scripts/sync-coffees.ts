@@ -18,6 +18,7 @@ const CoffeeBagIndexEntrySchema = CoffeeBagSchema.pick({
   origin: true,
   variety: true,
   process: true,
+  farm: true,
   status: true,
   createdAt: true,
 })

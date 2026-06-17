@@ -1,0 +1,42 @@
+---
+import coffeesIndex from '@/cache/coffees/index.json'
+import type { CoffeeBag } from '@/types/coffee'
+
+interface Props {
+  bags?: CoffeeBag[]
+  limit?: number
+  activeOnly?: boolean
+}
+
+const { bags, limit, activeOnly } = Astro.props
+
+const source = bags ?? (coffeesIndex as CoffeeBag[])
+const filtered = activeOnly ? source.filter(bag => bag.status === 'active') : source
+const list = bags ? filtered : filtered.slice(0, limit)
+
+const display = (value: string | null) => value ?? '—'
+---
+
+  {list.map((bag) => (
+    <div class="coffee">
+      <h2 class="coffeeName">{display(bag.process)}</h2>
+      <p class="coffeeRoaster">by {display(bag.roaster)}</p>
+
+      <dl>
+       <dt >Roaster</dt>
+       <dd >{display(bag.roaster)}</dd>
+
+       <dt>Process</dt>
+       <dd>{display(bag.process)}</dd>
+
+       <dt>Variety</dt>
+       <dd>{display(bag.variety)}</dd>
+
+       <dt>Farm</dt>
+       <dd>{display(bag.farm)}</dd>
+
+       <dt>Origin</dt>
+       <dd>{display(bag.origin)}</dd>
+      </dl>
+    </div>
+  ))}
