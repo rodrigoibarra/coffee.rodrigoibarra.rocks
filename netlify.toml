@@ -6,7 +6,7 @@
   NODE_VERSION = "20"
 
 [[plugins]]
-  package = "@netlify/plugin-cache"
+  package = "netlify-plugin-cache"
 
   [plugins.inputs]
     paths = ["src/cache/shots", "src/cache/coffees"]
