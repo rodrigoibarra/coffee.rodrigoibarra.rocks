@@ -10,11 +10,11 @@ export interface ShotIndexEntry {
 export interface ShotSample {
   elapsed_ms: number
   profile_elapsed_ms: number
-  status: 'Brew' | 'retracting' | string
-  pressure: number
-  flow: number
-  weight: number
-  gravimetric_flow: number
+  status: string
+  pressure: number | null
+  flow: number | null
+  weight: number | null
+  gravimetric_flow: number | null
   setpoint_active: 'pressure' | 'flow' | null
   setpoint_pressure: number | null
   setpoint_flow: number | null

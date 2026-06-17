@@ -1,80 +1,90 @@
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import process from 'node:process'
+import type { Shot, ShotIndexEntry } from '../src/types/shots'
+import { mkdir, readdir, unlink, writeFile } from 'node:fs/promises'
+import path from 'node:path'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-// scripts/sync-shots.ts
-// Downloads shot cache from Cloudflare R2 and writes to src/cache/shots/
-//   src/cache/shots/shots-index.json   — lightweight index for the Brew Log page
-//   src/cache/shots/shot-{uuid}.json   — full time-series per shot for detail pages
-//
-// Strategy:
-//   1. Always re-download shots-index.json (tiny, source of truth)
-//   2. Parse index to get all UUIDs
-//   3. Only download shot files that don't already exist locally
-import dotenv from 'dotenv'
 
-dotenv.config({ path: '.env.local' })
+const R2_ENDPOINT_URL = process.env.R2_ENDPOINT_URL
+const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID
+const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY
+const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME
+const R2_PREFIX = (process.env.R2_PREFIX ?? 'metshots/').replace(/\/?$/, '/')
 
-const BUCKET = process.env.R2_BUCKET_NAME ?? 'ghost-media'
-const PREFIX = 'metshots/'
-const OUT_DIR = 'src/cache/shots'
+const CACHE_LIMIT = 50
+const CACHE_DIR = path.resolve('src/cache/shots')
 
-const client = new S3Client({
-  region: 'auto',
-  endpoint: process.env.R2_ENDPOINT_URL,
-  credentials: {
-    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
-  },
-})
-
-async function streamToString(stream: NodeJS.ReadableStream): Promise<string> {
-  const chunks: Buffer[] = []
-  for await (const chunk of stream as AsyncIterable<Buffer>) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+function s3Client() {
+  if (!R2_ENDPOINT_URL || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET_NAME) {
+    throw new Error('Missing R2 env vars — check .env.local')
   }
-  return Buffer.concat(chunks).toString('utf-8')
+  return new S3Client({
+    endpoint: R2_ENDPOINT_URL,
+    region: 'auto',
+    credentials: {
+      accessKeyId: R2_ACCESS_KEY_ID,
+      secretAccessKey: R2_SECRET_ACCESS_KEY,
+    },
+  })
 }
 
-async function downloadFile(key: string): Promise<string> {
-  const res = await client.send(new GetObjectCommand({ Bucket: BUCKET, Key: key }))
-  if (!res.Body)
-    throw new Error(`Empty response for key: ${key}`)
-  return streamToString(res.Body as NodeJS.ReadableStream)
+async function getObjectJson<T>(s3: S3Client, key: string): Promise<T> {
+  const res = await s3.send(
+    new GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: `${R2_PREFIX}${key}` }),
+  )
+  const body = await res.Body!.transformToString()
+  return JSON.parse(body) as T
+}
+
+async function fileExists(p: string): Promise<boolean> {
+  try {
+    await import('node:fs/promises').then(fs => fs.access(p))
+    return true
+  }
+  catch {
+    return false
+  }
 }
 
 async function syncShots() {
-  mkdirSync(OUT_DIR, { recursive: true })
+  const s3 = s3Client()
+  await mkdir(CACHE_DIR, { recursive: true })
 
-  // Always re-download the index — it's tiny and is the source of truth
-  console.log('Downloading shots-index.json...')
-  const indexJson = await downloadFile(`${PREFIX}shots-index.json`)
-  writeFileSync(`${OUT_DIR}/shots-index.json`, indexJson)
+  console.log('Fetching shots-index.json from R2...')
+  const fullIndex = await getObjectJson<ShotIndexEntry[]>(s3, 'shots-index.json')
+  const trimmed = fullIndex.slice(0, CACHE_LIMIT) // already sorted newest-first
+  const keepIds = new Set(trimmed.map(s => s.id))
 
-  const index: { id: string }[] = JSON.parse(indexJson)
-  console.log(`✓ Index written — ${index.length} shots total`)
-
-  // Only download shot files we don't already have
-  const missing = index.filter(s => !existsSync(`${OUT_DIR}/shot-${s.id}.json`))
-  console.log(`${missing.length} new shots to download`)
-
-  if (missing.length === 0) {
-    console.log('✓ Cache is up to date')
-    return
-  }
+  console.log(`Keeping the latest ${trimmed.length} of ${fullIndex.length} shots.`)
 
   let downloaded = 0
-  for (const shot of missing) {
-    const content = await downloadFile(`${PREFIX}shot-${shot.id}.json`)
-    writeFileSync(`${OUT_DIR}/shot-${shot.id}.json`, content)
+  for (const entry of trimmed) {
+    const shotPath = path.join(CACHE_DIR, `shot-${entry.id}.json`)
+    if (await fileExists(shotPath))
+      continue
+
+    const shot = await getObjectJson<Shot>(s3, `shot-${entry.id}.json`)
+    await writeFile(shotPath, JSON.stringify(shot))
     downloaded++
-    if (downloaded % 25 === 0)
-      console.log(`  ${downloaded}/${missing.length}...`)
+    console.log(`  downloaded shot-${entry.id}.json`)
   }
 
-  console.log(`✓ Downloaded ${downloaded} new shot files`)
+  const existing = await readdir(CACHE_DIR)
+  let pruned = 0
+  for (const file of existing) {
+    if (!file.startsWith('shot-') || !file.endsWith('.json'))
+      continue
+    const id = file.slice('shot-'.length, -'.json'.length)
+    if (!keepIds.has(id)) {
+      await unlink(path.join(CACHE_DIR, file))
+      pruned++
+    }
+  }
+
+  await writeFile(path.join(CACHE_DIR, 'index.json'), JSON.stringify(trimmed))
+
+  console.log(`Done. Downloaded ${downloaded}, pruned ${pruned}, cache holds ${trimmed.length} shots.`)
 }
 
 syncShots().catch((err) => {
-  console.error('sync-shots failed:', err)
+  console.error(err)
   process.exit(1)
 })

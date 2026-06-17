@@ -1,0 +1,60 @@
+---
+import BaseLayout from '@/layouts/baseLayout.astro'
+import ShotGraph from '@/components/ShotGraph'
+import { getShotStats, buildShotTraces, getStageMarkers, buildStageShapes, buildStageAnnotations } from '@/utils/shots'
+import type { Shot, ShotIndexEntry } from '@/types/shots'
+import indexData from '@/cache/shots/index.json'
+
+export async function getStaticPaths() {
+  const index = indexData as ShotIndexEntry[]
+  const shotFiles = import.meta.glob<{ default: Shot }>('/src/cache/shots/shot-*.json')
+
+  return Promise.all(
+    index.map(async (entry) => {
+      const loader = shotFiles[`/src/cache/shots/shot-${entry.id}.json`]
+      const { default: shot } = await loader()
+      const markers = getStageMarkers(shot)
+      return {
+        params: { id: entry.id },
+        props: {
+          stats: getShotStats(shot),
+          traces: buildShotTraces(shot),
+          shapes: buildStageShapes(markers),
+          annotations: buildStageAnnotations(markers),
+          profileName: shot.profile_name,
+          timestamp: shot.timestamp,
+        },
+      }
+    }),
+  )
+}
+
+const { stats, traces, shapes, annotations, profileName, timestamp } = Astro.props
+---
+
+<BaseLayout title={`Shot — ${profileName}`}>
+    <section class="singleShot container stack">
+        <h1 class="mainTitle">{profileName}</h1>
+        <p>All shot data pulled from Meticulous and cleaned up locally to display here, these are by no means perfect representations of the profile and might vary due to dialing in.</p>
+        <dl class="shotStats grid">
+            <div>
+                <dt>Date Pulled |</dt><dd>{new Date(timestamp).toLocaleString()}</dd>
+            </div>
+          <div><dt>Total time |</dt><dd>{(stats.totalTimeMs / 1000).toFixed(1)}s</dd></div>
+          <div><dt>Final weight |</dt><dd>{stats.finalWeight?.toFixed(1)}g</dd></div>
+          <div><dt>Temperature |</dt><dd>{stats.temperature}°C</dd></div>
+        </dl>
+
+        <ShotGraph client:only="react" traces={traces} shapes={shapes} annotations={annotations} />
+    </section>
+    <details class="container stack">
+      <summary>How to read this graph.</summary>
+      <p>The graph describes the data from each shot exported from the meticulous. Each dotted line corresponds with the start of a stage delimited on the profile, on the left axis we get scale for flow and pressure, on the right scale for weight and its corresponding gravimetric flow.</p>
+      <ul>
+        <li><strong>Pressure (bar)</strong> — water pressure during extraction.</li>
+        <li><strong>Flow (ml/s)</strong> — the rate water moves through the puck, as read by the machine's flow sensor.</li>
+        <li><strong>Gravimetric flow (g/s)</strong> — the rate weight is actually landing in the cup, calculated from the scale rather than the flow sensor.</li>
+        <li><strong>Weight (g)</strong> — the cumulative weight collected in the cup.</li>
+      </ul>
+    </details>
+</BaseLayout>
