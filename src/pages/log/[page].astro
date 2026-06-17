@@ -7,7 +7,7 @@ import BaseLayout from '@/layouts/baseLayout.astro'
 export async function getStaticPaths() {
   const PER_PAGE = 25
 
-  const raw = readFileSync(resolve('src/cache/shots/shots-index.json'), 'utf-8')
+  const raw = readFileSync(resolve('src/cache/shots/index.json'), 'utf-8')
   const allShots: ShotIndexEntry[] = JSON.parse(raw)
 
   allShots.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
@@ -33,10 +33,10 @@ const { shots, page, totalPages, totalShots } = Astro.props
 ---
 
 <BaseLayout title="The Brew Log">
-  <main class="logPage container grid">
+  <main class="logPage container grid stack">
     <h1 class="mainTitle">The Brew Log</h1>
-    <h2>A log of every espresso I've pulled</h2>
-    <p>{totalShots} shots</p>
+    <h2>An abreviated log of espresso shots pulled on my espresso machine</h2>
+    <p>This list is reduced to 50 total shots and gets updated every weekend</p>
 
     <ol class="logList stack" start={(page - 1) * PER_PAGE + 1}>
       {shots.map(shot => (

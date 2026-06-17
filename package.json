@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "npm run sync:coffees && npm run sync:shots && astro build",
     "sync:shots": "tsx scripts/sync-shots.ts",
+    "prebuild": "npx tsx --env-file=.env.local scripts/sync-shots.ts",
     "sync:coffees": "tsx scripts/sync-coffees.ts",
     "preview": "astro preview",
     "astro": "astro"
