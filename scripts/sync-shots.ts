@@ -7,7 +7,7 @@ const R2_ENDPOINT_URL = process.env.R2_ENDPOINT_URL
 const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID
 const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY
 const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME
-const R2_PREFIX = (process.env.R2_PREFIX ?? 'metshots/').replace(/\/?$/, '/')
+const R2_PREFIX = (process.env.R2_PREFIX ?? '').replace(/\/?$/, '/')
 
 const CACHE_LIMIT = 50
 const CACHE_DIR = path.resolve('src/cache/shots')
